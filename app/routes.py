@@ -62,3 +62,19 @@ def update_point_of_sales(id):
     db.session.commit()
 
     return jsonify({"id": pos.id, "store_name": pos.store_name})
+
+@pos.route('/point_of_sales/<int:id>', methods=['DELETE'])
+def delete_point_of_sales(id):
+
+    pos = PointOfSale.query.get(id)
+
+    if not pos:
+        return jsonify({"error": "Not found"}), 404
+    
+    if pos.is_deleted:
+        return jsonify({"error": "Already deleted"}), 400
+    
+    pos.is_deleted = True
+    db.session.commit()
+
+    return jsonify({"message": "Deleted"})
