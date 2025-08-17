@@ -45,3 +45,20 @@ def get_point_of_sales(id):
         return jsonify({"error": "404 Not found"}), 404
     
     return jsonify({"id": pos.id, "store_name": pos.store_name, "siret": pos.siret})
+
+@pos.route('/point_of_sales/<int:id>', methods=['PUT'])
+def update_point_of_sales(id):
+
+    pos = PointOfSale.query.get(id)
+
+    if not pos or pos.is_deleted:
+        return jsonify({"error": "Not found"}), 404
+    
+    data = request.json
+
+    for key, value in data.items():
+        setattr(pos, key, value)
+
+    db.session.commit()
+
+    return jsonify({"id": pos.id, "store_name": pos.store_name})
