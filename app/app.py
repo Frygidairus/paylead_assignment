@@ -2,8 +2,8 @@ from flask import Flask
 from sqlalchemy.exc import OperationalError
 
 from models import db
-from routes import pos as pos_bp
-from health import health_bp
+from routes.pos import pos as pos_bp
+from routes.health import health_bp
 import config
 
 def create_app():
