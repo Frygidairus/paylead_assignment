@@ -35,3 +35,13 @@ def list_point_of_sales():
     ]
 
     return jsonify(result)
+
+@pos.route('/point_of_sales/<int:id>', methods=['GET'])
+def get_point_of_sales(id):
+
+    pos = PointOfSale.query.get(id)
+    
+    if not pos or pos.is_deleted:
+        return jsonify({"error": "404 Not found"}), 404
+    
+    return jsonify({"id": pos.id, "store_name": pos.store_name, "siret": pos.siret})
