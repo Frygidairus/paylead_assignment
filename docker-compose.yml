@@ -10,3 +10,16 @@ services:
       - "5432:5432"
     volumes:
       - ./init:/docker-entrypoint-initdb.d
+
+  dagster:
+    image: python:3.11-slim
+    container_name: dagster
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./paylead_dagster:/workspace
+    working_dir: /workspace
+    command: >
+      sh -c "pip install dagster dagit sqlalchemy psycopg2-binary && dagit -w /workspace/workspace.yaml -h 0.0.0.0 -p 3000"
+    depends_on:
+      - postgres
