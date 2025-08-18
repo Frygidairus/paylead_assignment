@@ -9,8 +9,8 @@ CREATE TABLE point_of_sales (
 -- Address fields
     street_number VARCHAR(10),
     street TEXT,
-    -- zip_code limited to 6 characters for French postal codes
-    zip_code VARCHAR(6),
+    -- zip_code limited to 12 characters for French postal codes including ' CEDEX'
+    zip_code VARCHAR(12),
     city TEXT,
     
     latitude DOUBLE PRECISION,
