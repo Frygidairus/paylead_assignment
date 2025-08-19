@@ -31,6 +31,10 @@ def create_point_of_sales():
     """
 
     data = request.json
+    # Check if the store_name has been provided
+    if not "store_name" in data.keys():
+        return jsonify({"error": "No store_name provided"}), 400
+    
     pos = PointOfSale(**data)
 
     db.session.add(pos)
