@@ -6,6 +6,29 @@ pos = Blueprint('pos', __name__)
 
 @pos.route('/point_of_sales', methods=['POST'])
 def create_point_of_sales():
+    """
+    Create a new Point of Sale.
+
+    Request JSON body:
+        {
+            "store_name": str mandatory,
+            "siret": str,
+            "street_number": str limited to 10 characters,
+            "street": str,
+            "zip_code": str limited to 12 characters,
+            "city": str,
+            "latitude": str,
+            "longitude": str
+        }
+
+    Responses:
+        201 Created:
+            {
+                "id": int,
+                "store_name": str
+            }
+        400 Bad Request: if input data is invalid
+    """
 
     data = request.json
     pos = PointOfSale(**data)
@@ -17,6 +40,25 @@ def create_point_of_sales():
 
 @pos.route('/point_of_sales', methods=['GET'])
 def list_point_of_sales():
+    """
+    List all Point of Sales (not deleted).
+
+    Query Parameters (optional):
+        - siret: str → filter by SIRET number
+        - zip_code: str → filter by postal code
+
+    Responses:
+        200 OK:
+            [
+                {
+                    "id": int,
+                    "store_name": str,
+                    "siret": str,
+                    "zip_code": str
+                },
+                ...
+            ]
+    """
 
     siret = request.args.get("siret")
     zip_code = request.args.get("zip_code")
@@ -38,16 +80,51 @@ def list_point_of_sales():
 
 @pos.route('/point_of_sales/<int:id>', methods=['GET'])
 def get_point_of_sales(id):
+    """
+    Retrieve a specific Point of Sale by ID.
 
+    Path Parameters:
+        - id: int → Point of Sale ID
+
+    Responses:
+        200 OK:
+            {
+                "id": int,
+                "store_name": str,
+                "siret": str,
+                "zip_code": str
+            }
+        404 Not Found: if the Point of Sale does not exist or is deleted
+    """
     pos = PointOfSale.query.get(id)
     
     if not pos or pos.is_deleted:
         return jsonify({"error": "404 Not found"}), 404
     
-    return jsonify({"id": pos.id, "store_name": pos.store_name, "siret": pos.siret})
+    return jsonify({"id": pos.id, "store_name": pos.store_name, "siret": pos.siret, "zip_code": pos.zip_code})
 
 @pos.route('/point_of_sales/<int:id>', methods=['PUT'])
 def update_point_of_sales(id):
+    """
+    Update a Point of Sale by ID.
+
+    Path Parameters:
+        - id: int → Point of Sale ID
+
+    Request JSON body:
+        {
+            "field": "new_value",
+            ...
+        }
+
+    Responses:
+        200 OK:
+            {
+                "id": int,
+                "store_name": str
+            }
+        404 Not Found: if the Point of Sale does not exist or is deleted
+    """
 
     pos = PointOfSale.query.get(id)
 
@@ -65,7 +142,20 @@ def update_point_of_sales(id):
 
 @pos.route('/point_of_sales/<int:id>', methods=['DELETE'])
 def delete_point_of_sales(id):
+    """
+    Soft delete a Point of Sale by ID (set `is_deleted=True`).
 
+    Path Parameters:
+        - id: int → Point of Sale ID
+
+    Responses:
+        200 OK:
+            {
+                "message": "Deleted"
+            }
+        400 Bad Request: if the Point of Sale is already deleted
+        404 Not Found: if the Point of Sale does not exist
+    """
     pos = PointOfSale.query.get(id)
 
     if not pos:
