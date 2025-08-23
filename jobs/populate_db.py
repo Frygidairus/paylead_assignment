@@ -70,7 +70,7 @@ def load_etablissements(batch_size=5000, limit=5000000):
 
         # For each name rows, pick the first non-empty value
         df["store_name"] = df[name_cols].apply(
-            lambda row: next((x for x in row if pd.notna(x) and x != ""), ""), axis=1)
+            lambda row: next((x for x in row if pd.notna(x) and x != "" and x != "[ND]"), ""), axis=1)
         
         # Keep only rows where a store_name exists
         df = df[df["store_name"] != ""]
