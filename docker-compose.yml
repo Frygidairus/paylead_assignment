@@ -11,6 +11,18 @@ services:
     volumes:
       - ./init:/docker-entrypoint-initdb.d
 
+  flask_app:
+    build:
+      context: .
+      dockerfile: dockerfile
+    container_name: paylead_flask_app
+    ports:
+      - "5001:5000"
+    environment:
+      DATABASE_URI: postgresql://admin:adminpass@postgres:5432/paylead_db
+    depends_on:
+      - postgres
+
   # dagster:
   #   image: python:3.11-slim
   #   container_name: dagster
