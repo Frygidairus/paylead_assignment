@@ -4,6 +4,8 @@ from pyarrow import parquet as pq
 from sqlalchemy import create_engine, text
 import logging
 
+from normalize_db import normalize_store_name
+
 logging.basicConfig(
     level=logging.INFO,  # Show INFO and above
     format="%(asctime)s [%(levelname)s] %(name)s: %(message)s"
@@ -91,6 +93,9 @@ def load_etablissements(batch_size=5000, limit=5000000):
         df["latitude"] = pd.to_numeric(df["latitude"], errors="coerce")
         df["longitude"] = pd.to_numeric(df["longitude"], errors="coerce")
 
+        # Normalize store names
+        df["store_name_normalized"] = df["store_name"].apply(normalize_store_name)  
+        
         # Insert into DB
         df.to_sql("point_of_sales", engine, if_exists="append", index=False)
 
