@@ -1,0 +1,16 @@
+# environment and cache
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg-info/
+dist/
+build/
+venv/
+.env
+# data folder
+data
+# git related
+.git
+.gitignore
+*.md
