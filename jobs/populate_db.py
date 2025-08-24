@@ -1,10 +1,17 @@
 import os
 import pandas as pd
 from pyarrow import parquet as pq
+import unicodedata
 from sqlalchemy import create_engine, text
 import logging
 
-from normalize_db import normalize_store_name
+# Function to normalize store names
+def normalize_store_name(store_name):
+   
+   normalized_store_name = store_name.lower().strip()
+   normalized_store_name = unicodedata.normalize('NFKD', normalized_store_name).encode('ascii', 'ignore').decode('ascii')
+   normalized_store_name = '-'.join(normalized_store_name.split())
+   return normalized_store_name
 
 logging.basicConfig(
     level=logging.INFO,  # Show INFO and above
