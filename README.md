@@ -23,24 +23,26 @@ Small Flask API and ETL job suite to ingest, normalize and store point-of-sale d
 ## Quickstart — Local (VS Code / terminal)
 1. Create and activate virtualenv:
    ```
-   python -m venv .venv
-   source .venv/bin/activate
+   python -m venv venv
+   source venv/bin/activate
    pip install -r requirements.txt
    ```
 2. Ensure data files exist in `data/` (or set env vars to point them).
-3. Start Postgres (compose or external) and run the app:
-   ```
-   export DATABASE_URI="postgresql://admin:adminpass@localhost:5432/paylead_db"
-   python app/app.py
-   ```
-4. Run jobs manually:
-   ```
-   python jobs/populate_db.py
-   python jobs/normalize_db.py
-   ```
-
-## Docker
-- Start DB and app:
+3. Start Postgres DB and app:
   ```
   docker-compose up -d 
   ```
+3. Run populate job manually (may take several minutes):
+   ```
+   python jobs/populate_db.py
+  
+   ```
+
+## NB
+- the endpoint 127.0.0.1:5001/health will return 'ok' if the API is up and running.
+- the API can be run manually using:
+```
+python app/app.py
+```
+## WARNINGS
+- depending on your Docker setup, a very large query may crash the API (exited with code 137), indicating Docker did not have enough RAM to process the query 
