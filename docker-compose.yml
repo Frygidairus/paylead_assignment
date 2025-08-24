@@ -14,7 +14,7 @@ services:
   flask_app:
     build:
       context: .
-      dockerfile: dockerfile
+      dockerfile: app/Dockerfile
     container_name: paylead_flask_app
     ports:
       - "5001:5000"
@@ -22,16 +22,3 @@ services:
       DATABASE_URI: postgresql://admin:adminpass@postgres:5432/paylead_db
     depends_on:
       - postgres
-
-  # dagster:
-  #   image: python:3.11-slim
-  #   container_name: dagster
-  #   ports:
-  #     - "3000:3000"
-  #   volumes:
-  #     - ./paylead_dagster:/workspace
-  #   working_dir: /workspace
-  #   command: >
-  #     sh -c "pip install dagster dagit sqlalchemy psycopg2-binary && dagit -w /workspace/workspace.yaml -h 0.0.0.0 -p 3000"
-  #   depends_on:
-  #     - postgres
