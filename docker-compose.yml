@@ -14,7 +14,7 @@ services:
   flask_app:
     build:
       context: .
-      dockerfile: dockerfile
+      dockerfile: app/Dockerfile
     container_name: paylead_flask_app
     ports:
       - "5001:5000"
