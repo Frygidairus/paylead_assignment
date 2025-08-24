@@ -37,12 +37,25 @@ Small Flask API and ETL job suite to ingest, normalize and store point-of-sale d
    python jobs/populate_db.py
   
    ```
+4. Create a few random point of sale (using the Postman collection?)
+5. Run this script to build the Docker image to normalize the new names:
+``` bash
+docker build -t normalize-job -f jobs/normalize_job/build/Dockerfile jobs/normalize_job
+```
+6. Run the image created:
+``` bash
+docker run -it normalize-job
+```
 
 ## NB
 - the endpoint 127.0.0.1:5001/health will return 'ok' if the API is up and running.
 - the API can be run manually using:
 ```
 python app/app.py
+```
+- it is possible to query the db inside its container using the command:
+``` bash
+docker exec -it paylead_postgres psql -U admin -d paylead_db
 ```
 ## WARNINGS
 - depending on your Docker setup, a very large query may crash the API (exited with code 137), indicating Docker did not have enough RAM to process the query 
