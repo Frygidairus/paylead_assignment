@@ -11,12 +11,14 @@ Small Flask API and ETL job suite to ingest, normalize and store point-of-sale d
 ## Repository layout
 - app/ — Flask application
   - app.py — application factory / startup
-  - config.py — configuration
+  - config.py — configuration (see for default DATABASE_URI and other env vars)
   - models.py — SQLAlchemy models
   - routes/ — api blueprints (health, pos)
-- jobs/ — ETL scripts (populate_db.py, normalize_db.py)
+- jobs/ — ETL scripts
+  - populate_db.py — initial population job
+  - normalize_job/ — normalization job (includes job/main.py which can be run locally)
 - data/ — input files (etablissements.parquet, carrefour_hypermarche.csv to be manually added)
-- dockerfile — web app image
+- app/Dockerfile — web app image (note: not a top-level Dockerfile)
 - docker-compose.yml — services manifest
 - requirements.txt — Python dependencies
 
