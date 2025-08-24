@@ -64,3 +64,11 @@ It can be noticed that no Dagster (or Airflow) instance is in the project. This 
 ## Assets
 The choice of not adding a Dagster instance was also motivated by the fact that, at the moment, the project only contains a single asset: the point_of_sales table. 
 The transformation (adding normalized names) is a simple UPDATE of the table.
+
+# Ideas of improvement
+- Create a Swagger for the API documentation
+- Test and debug _paylead\_dagster_
+- Add a test framework
+- Create a CI/CD
+- Automatically populate_db?
+- 
