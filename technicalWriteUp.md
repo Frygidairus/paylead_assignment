@@ -45,3 +45,22 @@ Some rows contain "[ND]" as _store\_name_. This seems to be a placeholder for un
 
 In order to speed up the process of initial insertion, and for demonstration purposes, a 5 million rows limit is set as default. 
 
+# The API
+## Flask
+Flask is a simple and easy to use web framework for Python. Once more, as it already part of Paylead's stack, it seemed to be a great choice to develop the API.
+## Endpoints
+The whole API code is located in the _app_ folder. SQLAlchemy is used to create a connection with the database.
+The routes are in the folder _routes_ where, in addition to the 5 mandatory endpoints, a health endpoint allow to check if the API is up and running, returning a simple 'ok' when it is.
+## Containerization
+The API is containerized and is run when the postgres container is up. A retry loop regarding the connection to the db is in place as the API container may sometimes be faster than the DB container at launch. This could also be handled using a health_check on the postgres container as a condition in the _docker-compose.yml_ for the API container.
+
+# Orchestration
+## jobs
+The _jobs_ folder contains the jobs to be orchestrated. Here, only one job exists: _normalize\_db_. It has its own folder, is containerized, basically stands alone. There are several advantages to this, such as easier dependency management (avoiding a larger requirements, favorising requirements for each job), easier testing and CI/CD integration.
+
+## Dagster
+It can be noticed that no Dagster (or Airflow) instance is in the project. This has been done in order to keep it lighter weight. As the jobs are containerized, they are easily executed and orchestrated using [dagster-docker](https://docs.dagster.io/api/libraries/dagster-docker). 
+
+## Assets
+The choice of not adding a Dagster instance was also motivated by the fact that, at the moment, the project only contains a single asset: the point_of_sales table. 
+The transformation (adding normalized names) is a simple UPDATE of the table.
